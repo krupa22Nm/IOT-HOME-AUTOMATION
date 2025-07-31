@@ -1,0 +1,1004 @@
+# IoT Home Automation System with HTML & CSS
+
+Here's a complete IoT Home Automation System interface built with HTML and CSS. This responsive dashboard allows users to control smart home devices remotely.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHome - IoT Automation System</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav ul li a:hover {
+            color: #3498db;
+        }
+        
+        nav ul li a i {
+            margin-right: 6px;
+            font-size: 18px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        
+        /* Main Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: calc(100vh - 90px);
+            position: sticky;
+            top: 90px;
+        }
+        
+        .sidebar-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 15px;
+        }
+        
+        .sidebar-menu li a {
+            color: #555;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu li a:hover, .sidebar-menu li a.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .sidebar-menu li a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Status Overview */
+        .status-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .status-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        
+        .status-icon.devices { background-color: #d6eaf8; color: #2980b9; }
+        .status-icon.energy { background-color: #d5f5e3; color: #27ae60; }
+        .status-icon.security { background-color: #fadbd8; color: #c0392b; }
+        .status-icon.temperature { background-color: #fef9e7; color: #f39c12; }
+        
+        .status-info h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .status-info p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* Room Controls */
+        .room-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .room-title i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        .room-controls {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        /* Device Controls */
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        
+        .device-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .device-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .device-header {
+            background-color: #f8f9fa;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .device-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .device-icon {
+            margin-right: 8px;
+            color: #3498db;
+        }
+        
+        .device-status {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+        
+        .status-on { 
+            background-color: #d5f5e3; 
+            color: #27ae60; 
+        }
+        
+        .status-off { 
+            background-color: #fadbd8; 
+            color: #c0392b; 
+        }
+        
+        .device-body {
+            padding: 15px;
+        }
+        
+        .device-image {
+            width: 100%;
+            height: 120px;
+            background-color: #ecf0f1;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #95a5a6;
+            font-size: 30px;
+        }
+        
+        .device-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .device-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #3498db;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* Slider Control */
+        .slider-control {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .slider-control input {
+            width: 100%;
+        }
+        
+        /* Scenes Section */
+        .scenes {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .scenes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .scene-card {
+            border: 2px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .scene-card:hover {
+            border-color: #3498db;
+            transform: translateY(-3px);
+        }
+        
+        .scene-card.active {
+            border-color: #3498db;
+            background-color: #ebf5fb;
+        }
+        
+        .scene-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+        
+        .scene-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .scene-devices {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        /* Energy Monitoring */
+        .energy-monitor {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+            margin-top: 20px;
+        }
+        
+        .chart {
+            width: 100%;
+            height: 100%;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .chart-grid-line {
+            border-bottom: 1px dashed #ddd;
+            width: 100%;
+        }
+        
+        .chart-data {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+        }
+        
+        .chart-bar {
+            width: 30px;
+            background-color: #3498db;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+        }
+        
+        .chart-label {
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        /* Security System */
+        .security-system {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .security-camera {
+            background-color: #2c3e50;
+            color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .camera-feed {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #34495e;
+            position: relative;
+        }
+        
+        .camera-feed::before {
+            content: "📹";
+            font-size: 40px;
+        }
+        
+        .camera-feed::after {
+            content: "LIVE";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .camera-info {
+            padding: 15px;
+            background-color: #34495e;
+        }
+        
+        .camera-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .camera-status {
+            font-size: 12px;
+            color: #1abc9c;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 200px 1fr;
+            }
+            
+            .sidebar {
+                width: 200px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                height: auto;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .security-system {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
+            
+            .status-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .device-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .scenes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header-content {
+                padding: 0 10px;
+            }
+            
+            .device-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .scenes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .room-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+    <!-- Font Awesome for icons (using CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-home"></i> SmartHome
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-lightbulb"></i> Devices</a></li>
+                    <li><a href="#"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <div class="user-name">John Doe</div>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h3 class="sidebar-title">Navigation</h3>
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-lightbulb"></i> Lighting</a></li>
+                    <li><a href="#"><i class="fas fa-thermometer-half"></i> Climate</a></li>
+                    <li><a href="#"><i class="fas fa-camera"></i> Security</a></li>
+                    <li><a href="#"><i class="fas fa-plug"></i> Energy</a></li>
+                    <li><a href="#"><i class="fas fa-couch"></i> Living Room</a></li>
+                    <li><a href="#"><i class="fas fa-bed"></i> Bedroom</a></li>
+                    <li><a href="#"><i class="fas fa-utensils"></i> Kitchen</a></li>
+                    <li><a href="#"><i class="fas fa-bath"></i> Bathroom</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Family</a></li>
+                    <li><a href="#"><i class="fas fa-history"></i> History</a></li>
+                </ul>
+            </aside>
+            
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Status Overview -->
+                <div class="status-overview">
+                    <div class="status-card">
+                        <div class="status-icon devices">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="status-info">
+                            <h3>12</h3>
+                            <p>Connected Devices</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-card">
+                        <div class="status-icon energy">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="status-info">
+                            <h3>1.2 kWh</h3>
+                            <p>Current Usage</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-card">
+                        <div class="status-icon security">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="status-info">
+                            <h3>Secure</h3>
+                            <p>All Systems Active</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-card">
+                        <div class="status-icon temperature">
+                            <i class="fas fa-temperature-high"></i>
+                        </div>
+                        <div class="status-info">
+                            <h3>22°C</h3>
+                            <p>Indoor Temperature</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Living Room Controls -->
+                <section class="room-controls">
+                    <h2 class="room-title">
+                        <i class="fas fa-couch"></i> Living Room
+                    </h2>
+                    <div class="device-grid">
+                        <div class="device-card">
+                            <div class="device-header">
+                                <div class="device-name">
+                                    <i class="fas fa-lightbulb device-icon"></i> Main Light
+                                </div>
+                                <span class="device-status status-on">ON</span>
+                            </div>
+                            <div class="device-body">
+                                <div class="device-image">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <div class="device-actions">
+                                    <div class="device-value">Brightness: 80%</div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="slider-control">
+                                    <input type="range" min="0" max="100" value="80">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="device-card">
+                            <div class="device-header">
+                                <div class="device-name">
+                                    <i class="fas fa-tv device-icon"></i> Smart TV
+                                </div>
+                                <span class="device-status status-on">ON</span>
+                            </div>
+                            <div class="device-body">
+                                <div class="device-image">
+                                    <i class="fas fa-tv"></i>
+                                </div>
+                                <div class="device-actions">
+                                    <div class="device-value">Volume: 45%</div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="slider-control">
+                                    <input type="range" min="0" max="100" value="45">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="device-card">
+                            <div class="device-header">
+                                <div class="device-name">
+                                    <i class="fas fa-wind device-icon"></i> Air Conditioner
+                                </div>
+                                <span class="device-status status-on">ON</span>
+                            </div>
+                            <div class="device-body">
+                                <div class="device-image">
+                                    <i class="fas fa-wind"></i>
+                                </div>
+                                <div class="device-actions">
+                                    <div class="device-value">22°C</div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="slider-control">
+                                    <input type="range" min="16" max="30" value="22">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="device-card">
+                            <div class="device-header">
+                                <div class="device-name">
+                                    <i class="fas fa-volume-up device-icon"></i> Speaker
+                                </div>
+                                <span class="device-status status-off">OFF</span>
+                            </div>
+                            <div class="device-body">
+                                <div class="device-image">
+                                    <i class="fas fa-volume-up"></i>
+                                </div>
+                                <div class="device-actions">
+                                    <div class="device-value">Volume: 60%</div>
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="slider-control">
+                                    <input type="range" min="0" max="100" value="60" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Bedroom Controls -->
+                <section class="room-controls">
+                    <h2 class="room-title">
+                        <i class="fas fa-bed"></i> Bedroom
+                    </h2>
+                    <div class="device-grid">
+                        <div class="device-card">
+                            <div class="device-header">
+                                <div class="device-name">
+                                    <i class="fas fa-lightbulb device-icon"></i> Bedside Lamp
+                                </div>
+                                <span class="device-status status-off">OFF</span>
+                            </div>
+                            <div class="device-body">
+                                <div class="device-image">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <div class="device-actions">
+                                    <div class="device-value">Warm White</div>
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="device-card">
+                            <div class="device-header">
+                                <div class="device-name">
+                                    <i class="fas fa-blanket device-icon"></i> Smart Heater
+                                </div>
+                                <span class="device-status status-off">OFF</span>
+                            </div>
+                            <div class="device-body">
+                                <div class="device-image">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="device-actions">
+                                    <div class="device-value">18°C</div>
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="slider-control">
+                                    <input type="range" min="16" max="30" value="18" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="device-card">
+                            <div class="device-header">
+                                <div class="device-name">
+                                    <i class="fas fa-window-maximize device-icon"></i> Smart Blinds
+                                </div>
+                                <span class="device-status status-on">OPEN</span>
+                            </div>
+                            <div class="device-body">
+                                <div class="device-image">
+                                    <i class="fas fa-window-maximize"></i>
+                                </div>
+                                <div class="device-actions">
+                                    <div class="device-value">75% Open</div>
+                                    <label class="switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="slider-control">
+                                    <input type="range" min="0" max="100" value="75">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Quick Scenes -->
+                <section class="scenes">
+                    <h2 class="room-title">
+                        <i class="fas fa-sliders-h"></i> Quick Scenes
+                    </h2>
+                    <div class="scenes-grid">
+                        <div class="scene-card active">
+                            <div class="scene-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="scene-name">Morning</div>
+                            <div class="scene-devices">Lights on, blinds open</div>
+                        </div>
+                        
+                        <div class="scene-card">
+                            <div class="scene-icon">
+                                <i class="fas fa-couch"></i>
+                            </div>
+                            <div class="scene-name">Relax</div>
+                            <div class="scene-devices">Dim lights, TV on</div>
+                        </div>
+                        
+                        <div class="scene-card">
+                            <div class="scene-icon">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <div class="scene-name">Movie Night</div>
+                            <div class="scene-devices">Lights off, blinds closed</div>
+                        </div>
+                        
+                        <div class="scene-card">
+                            <div class="scene-icon">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <div class="scene-name">Sleep</div>
+                            <div class="scene-devices">All off, heater on</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Energy Monitoring -->
+                <section class="energy-monitor">
+                    <h2 class="room-title">
+                        <i class="fas fa-chart-bar"></i> Energy Consumption
+                    </h2>
+                    <div class="chart-container">
+                        <div class="chart">
+                            <div class="chart-grid">
+                                <div class="chart-grid-line"></div>
+                                <div class="chart-grid-line"></div>
+                                <div class="chart-grid-line"></div>
+                                <div class="chart-grid-line"></div>
+                                <div class="chart-grid-line"></div>
+                            </div>
+                            <div class="chart-data">
+                                <div class="chart-bar" style="height: 60%;">
+                                    <div class="chart-label">Mon</div>
+                                </div>
+                                <div class="chart-bar" style="height: 75%;">
+                                    <div class="chart-label">Tue</div>
+                                </div>
+                                <div class="chart-bar" style="height: 50%;">
+                                    <div class="chart-label">Wed</div>
+                                </div>
+                                <div class="chart-bar" style="height: 80%;">
+                                    <div class="chart-label">Thu</div>
+                                </div>
+                                <div class="chart-bar" style="height: 70%;">
+                                    <div class="chart-label">Fri</div>
+                                </div>
+                                <div class="chart-bar" style="height: 90%;">
+                                    <div class="chart-label">Sat</div>
+                                </div>
+                                <div class="chart-bar" style="height: 85%;">
+                                    <div class="chart-label">Sun</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Security System -->
+                <section class="room-controls">
+                    <h2 class="room-title">
+                        <i class="fas fa-camera"></i> Security System
+                    </h2>
+                    <div class="security-system">
+                        <div class="security-camera">
+                            <div class="camera-feed"></div>
+                            <div class="camera-info">
+                                <div class="camera-title">Front Door</div>
+                                <div class="camera-status">Motion Detected • 2 min ago</div>
+                            </div>
+                        </div>
+                        
+                        <div class="security-camera">
+                            <div class="camera-feed"></div>
+                            <div class="camera-info">
+                                <div class="camera-title">Backyard</div>
+                                <div class="camera-status">All Clear</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
+```
+
